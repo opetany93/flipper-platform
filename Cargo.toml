@@ -3,7 +3,8 @@ name = "flipper-platform"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85.0"
+repository = "https://github.com/opetany93/flipper-platform"
 
 [dependencies]
-flipperzero = { version = "0.16.0", features = ["alloc"] }
+flipperzero = { version = "0.16.0"}
 flipperzero-sys = "0.16.0"
