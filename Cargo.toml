@@ -1,0 +1,9 @@
+[package]
+name = "flipper-platform"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85.0"
+
+[dependencies]
+flipperzero = { version = "0.16.0", features = ["alloc"] }
+flipperzero-sys = "0.16.0"

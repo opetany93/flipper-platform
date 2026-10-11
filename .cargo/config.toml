@@ -1,0 +1,3 @@
+[build]
+# flipperzero-sys refuses to compile for anything other than the Flipper's MCU.
+target = "thumbv7em-none-eabihf"
