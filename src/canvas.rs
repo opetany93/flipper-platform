@@ -28,6 +28,7 @@ impl Font {
 pub enum HorizontalAlign {
     Left,
     Right,
+    Center,
 }
 
 impl HorizontalAlign {
@@ -35,6 +36,7 @@ impl HorizontalAlign {
         match self {
             Self::Left => sys::AlignLeft,
             Self::Right => sys::AlignRight,
+            Self::Center => sys::AlignCenter,
         }
     }
 }
@@ -43,6 +45,7 @@ impl HorizontalAlign {
 pub enum VerticalAlign {
     Top,
     Bottom,
+    Center,
 }
 
 impl VerticalAlign {
@@ -50,6 +53,7 @@ impl VerticalAlign {
         match self {
             Self::Top => sys::AlignTop,
             Self::Bottom => sys::AlignBottom,
+            Self::Center => sys::AlignCenter,
         }
     }
 }
