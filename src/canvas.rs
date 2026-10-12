@@ -89,20 +89,10 @@ impl Canvas<'_> {
         unsafe { sys::canvas_set_font(self.raw, font.to_sys()) };
     }
 
-    /// Draws `text` with its left edge at `x` and its baseline at `y`.
     pub fn draw_str(&mut self, x: i32, y: i32, text: &CStr) {
         // SAFETY: see `clear`. `text` is NUL-terminated and outlives the call.
         unsafe { sys::canvas_draw_str(self.raw, x, y, text.as_ptr()) };
     }
-
-    // pub fn canvas_draw_str_aligned(
-    //     canvas: *mut Canvas,
-    //     x: i32,
-    //     y: i32,
-    //     horizontal: Align,
-    //     vertical: Align,
-    //     str_: *const core::ffi::c_char,
-    // );
 
     pub fn draw_str_aligned(
         &mut self,

@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.85.0"
 repository = "https://github.com/opetany93/flipper-platform-rs"
+keywords = ["embedded", "flipperzero", "flipper", "hal", "platform"]
+categories = ["embedded", "no-std", "hardware-support"]
 
 [dependencies]
 flipperzero = { version = "0.16.0"}
