@@ -77,20 +77,20 @@ impl Canvas<'_> {
         }
     }
 
+    // SAFETY, for every `unsafe` below: `self.raw` is valid for the lifetime of
+    // `self`, per the contract of `from_raw`.
+
     pub fn clear(&mut self) {
-        // SAFETY: `self.raw` is valid for the lifetime of `self`, per the
-        // contract of `from_raw`. The same holds for the calls below.
         unsafe { sys::canvas_clear(self.raw) };
     }
 
     /// Selects the font for subsequent [`draw_str`](Self::draw_str) calls.
     pub fn set_font(&mut self, font: Font) {
-        // SAFETY: see `clear`.
         unsafe { sys::canvas_set_font(self.raw, font.to_sys()) };
     }
 
+    /// `y` is the baseline, not the top edge
     pub fn draw_str(&mut self, x: i32, y: i32, text: &CStr) {
-        // SAFETY: see `clear`. `text` is NUL-terminated and outlives the call.
         unsafe { sys::canvas_draw_str(self.raw, x, y, text.as_ptr()) };
     }
 
@@ -115,6 +115,11 @@ impl Canvas<'_> {
     }
 
     pub fn draw_xbm(&mut self, x: i32, y: i32, width: usize, height: usize, bitmap: &[u8]) {
+        assert!(
+            bitmap.len() >= width.div_ceil(8) * height,
+            "bitmap too short for {width}x{height}"
+        );
+
         unsafe { sys::canvas_draw_xbm(self.raw, x, y, width, height, bitmap.as_ptr()) };
     }
 
