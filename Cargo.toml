@@ -3,6 +3,7 @@ name = "flipper-platform"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85.0"
+description = "Safe, idiomatic Rust abstractions over the Flipper Zero firmware"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/opetany93/flipper-platform-rs"
 keywords = ["embedded", "flipperzero", "flipper", "hal", "platform"]

@@ -1,4 +1,4 @@
 [toolchain]
-channel = "nightly-2025-08-31"
+channel = "1.85.0"
 targets = ["thumbv7em-none-eabihf"]
 components = ["clippy", "rust-analyzer", "rustfmt"]
