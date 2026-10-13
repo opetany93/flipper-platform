@@ -4,6 +4,7 @@ use flipperzero::notification_sequence;
 pub struct BacklightLock(());
 
 impl BacklightLock {
+    #[must_use]
     pub fn acquire() -> Self {
         const BACKLIGHT_ON: NotificationSequence =
             notification_sequence![NotificationMessage::display_backlight_enforce_on()];

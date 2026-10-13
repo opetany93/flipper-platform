@@ -1,11 +1,9 @@
-//! Drawing on the canvas a view port hands to its draw callback.
-
 use core::ffi::CStr;
 use core::marker::PhantomData;
 
 use flipperzero_sys as sys;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Font {
     Bold,
     Regular,
@@ -24,7 +22,7 @@ impl Font {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum HorizontalAlign {
     Left,
     Right,
@@ -41,7 +39,7 @@ impl HorizontalAlign {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum VerticalAlign {
     Top,
     Bottom,
@@ -58,22 +56,15 @@ impl VerticalAlign {
     }
 }
 
-/// A borrowed drawing surface, valid for the duration of one draw callback.
-///
-/// The lifetime is what stops a canvas from being stashed somewhere and used
-/// after the GUI service has moved on.
 pub struct Canvas<'a> {
     raw: *mut sys::Canvas,
     _frame: PhantomData<&'a mut sys::Canvas>,
 }
 
 impl Canvas<'_> {
-    /// Wraps the canvas handed to a draw callback.
-    ///
     /// # Safety
     ///
-    /// `raw` must be a valid canvas, and the returned lifetime must not outlive
-    /// the callback it was handed to.
+    /// `raw` must stay valid for the returned lifetime.
     pub(crate) unsafe fn from_raw(raw: *mut sys::Canvas) -> Self {
         Self {
             raw,
@@ -81,19 +72,15 @@ impl Canvas<'_> {
         }
     }
 
-    // SAFETY, for every `unsafe` below: `self.raw` is valid for the lifetime of
-    // `self`, per the contract of `from_raw`.
-
     pub fn clear(&mut self) {
         unsafe { sys::canvas_clear(self.raw) };
     }
 
-    /// Selects the font for subsequent [`draw_str`](Self::draw_str) calls.
     pub fn set_font(&mut self, font: Font) {
         unsafe { sys::canvas_set_font(self.raw, font.to_sys()) };
     }
 
-    /// `y` is the baseline, not the top edge
+    /// `y` is the baseline, not the top edge.
     pub fn draw_str(&mut self, x: i32, y: i32, text: &CStr) {
         unsafe { sys::canvas_draw_str(self.raw, x, y, text.as_ptr()) };
     }
@@ -119,8 +106,13 @@ impl Canvas<'_> {
     }
 
     pub fn draw_xbm(&mut self, x: i32, y: i32, width: usize, height: usize, bitmap: &[u8]) {
+        let required = width
+            .div_ceil(8)
+            .checked_mul(height)
+            .expect("bitmap dimensions overflow");
+
         assert!(
-            bitmap.len() >= width.div_ceil(8) * height,
+            bitmap.len() >= required,
             "bitmap too short for {width}x{height}"
         );
 

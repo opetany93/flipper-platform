@@ -1,11 +1,13 @@
 # flipper-platform
 
-Safe Rust wrappers over the Flipper Zero firmware, for the parts the
-[`flipperzero`](https://crates.io/crates/flipperzero) crate does not cover.
+Safe Rust wrappers over the Flipper Zero firmware, built on the
+[`flipperzero`](https://crates.io/crates/flipperzero) crate, with borrowed
+callbacks instead of boxed `'static` ones.
 
 - **Borrowed callbacks.** View port and timer callbacks are plain closures
-  borrowed for the wrapper's lifetime: no boxing, no `'static`, and the borrow
-  checker guarantees they are detached before anything they capture goes away.
+  borrowed for the wrapper's lifetime: no boxing, no `'static`. A view port only
+  exists inside `ViewPort::scoped`, so its callbacks are always detached before
+  anything they capture goes away.
 - **RAII everywhere.** Every wrapper releases what it acquired on drop.
 - **No `unsafe` at the call site.**
 
@@ -36,11 +38,14 @@ let on_draw = |canvas: &mut Canvas<'_>| {
 };
 let on_input = |_event: InputEvent| {};
 
-let view_port = ViewPort::fullscreen(&on_draw, &on_input);
+ViewPort::scoped(&on_draw, &on_input, |view_port| {
+    // The app's event loop goes here.
+    view_port.request_redraw();
+});
 ```
 
-Dropping `view_port` removes it from the GUI, and dropping `_backlight` hands
-the backlight back to the firmware.
+The view port is removed from the GUI when `scoped` returns, and dropping
+`_backlight` hands the backlight back to the firmware.
 
 ## Status
 
