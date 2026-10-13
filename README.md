@@ -23,7 +23,7 @@ callbacks instead of boxed `'static` ones.
 
 ## Example
 
-```rust
+```rust,ignore
 use flipper_platform::backlight::BacklightLock;
 use flipper_platform::canvas::{Canvas, Font};
 use flipper_platform::input::InputEvent;
@@ -53,5 +53,7 @@ Early: the API covers what its first application needed and grows from there.
 
 ## License
 
-Licensed under either of [Apache License, Version 2.0](LICENSE-APACHE) or
-[MIT license](LICENSE-MIT) at your option.
+Licensed under either of
+[Apache License, Version 2.0](https://github.com/opetany93/flipper-platform-rs/blob/master/LICENSE-APACHE)
+or [MIT license](https://github.com/opetany93/flipper-platform-rs/blob/master/LICENSE-MIT)
+at your option.
